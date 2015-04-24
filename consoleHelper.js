@@ -27,6 +27,7 @@ try	{
 
     if (logType == null) {
 
+	//use the initialized value
         logType = this.mode;
 
     }
