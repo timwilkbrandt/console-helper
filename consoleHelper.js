@@ -2,91 +2,102 @@
  * ConsoleHelper consoleHelper.js
  * https://github.com/timwilkbrandt/console-helper
  * Author: Tim Wilk Brandt
- * Version: 1.0
+ * Version: 1.1
  * CreateDate: 2015-3-24
- * ModifyData: 2015-3-24
+ * ModifyData: 2015-5-7
  */
  
-function consoleHelper(timerIsActive, timerLabel, mode){
 
-    this.timerIsActive = timerIsActive;
-    this.timerLabel = timerLabel;
-    this.mode = mode;
+var consoleLogger = (function () {
 
-    if(timerIsActive){console.time(timerLabel);}
-};
+    function consoleLogger(timerIsActive, timerLabel, mode) {
 
-/*
-data: object being logged.
-logType: 0 log, 1 debug, 2 error, 3 dir-javascript, 4 dir-xml, 5 trace, 6 warn, 7 assert.
-timeStampLabel: label used for the time stamp, e.g.: 'enter init method'
-*/
-consoleHelper.prototype.log = function (data, timeStampLabel, logType) {
+        this.timerIsActive = timerIsActive;
+        this.timerLabel = timerLabel;
+        this.mode = mode;
 
-try	{
-
-    if (logType == null) {
-
-	//use the initialized value
-        logType = this.mode;
-
+        if (timerIsActive) { console.time(timerLabel); }
     }
 
-    switch (logType) {
-        case 0:
-            console.log(data);
-            break;
+    /*
+    data: object being logged.
+    logType: 0 log, 1 debug, 2 error, 3 dir-javascript, 4 dir-xml, 5 trace, 6 warn, 7 assert.
+    timeStampLabel: label used for the time stamp, e.g.: 'enter init method'
+    */
+    consoleLogger.prototype.log = function (data, logType, timeStampLabel) {
 
-        case 1:
-            console.debug(data);
-            break;
+        try {
 
-        case 2:
-            console.error(data);
-            break;
+            if (logType == null) {
 
-        case 3:
-            console.dir(data);
-            break;
+                //use the initialized value
+                logType = this.mode;
 
-        case 4:
-            console.dirXml(data);
-            break;
+            }
 
-        case 5:
-            console.trace(data);
-            break;
+            switch (logType) {
+                case 0:
+                    console.log(data);
+                    break;
 
-        case 6:
-            console.warn(data);
-            break;
+                case 1:
+                    console.debug(data);
+                    break;
 
-        case 7:
-            console.assert(data);
-            break;
-    }
+                case 2:
+                    console.error(data);
+                    break;
 
-    if (timeStampLabel != null && timeStampLabel.length > 0) {
-        console.timeStamp(timeStampLabel);
-    }
+                case 3:
+                    console.dir(data);
+                    break;
+
+                case 4:
+                    console.dirXml(data);
+                    break;
+
+                case 5:
+                    console.trace(data);
+                    break;
+
+                case 6:
+                    console.warn(data);
+                    break;
+
+                case 7:
+                    console.assert(data);
+                    break;
+            }
+
+            if (timeStampLabel != null && timeStampLabel.length > 0) {
+                console.timeStamp(timeStampLabel);
+            }
 
 
-}catch(e){
-//console not supported by current browser version.
-}
+        } catch (e) {
+            //console not supported by current browser version.
+        }
 
-}.bind(this);
+    }.bind(this);
 
-consoleHelper.prototype.clear = function(){	
-    console.clear();  };
+    consoleLogger.prototype.clear = function () {
+        console.clear();
+    };
 
-consoleHelper.prototype.destroy = function(){
+    consoleLogger.prototype.destroy = function () {
 
-    if(this.timerIsActive){console.timeEnd(this.timerLabel);}
+        var _this = this;
 
-    consoleHelper = null;
+        if (_this.timerIsActive) { console.timeEnd(_this.timerLabel); }
 
-}.bind(this);
+        consoleLogger = null;
+
+    };
+
+    return consoleLogger;
+
+})();
+
 
 
 
